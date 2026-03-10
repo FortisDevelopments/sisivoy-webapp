@@ -149,11 +149,23 @@ const QuienesSomos = () => {
                   alignItems: "center",
                 }}
               >
+              <a
+                href="https://apps.apple.com/mx/app/sisivoy/id6756131297"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <img
                   src={appstore}
-                  alt="Google Play"
-                  style={{ width: "80%", objectFit: "contain" }}
+                  alt="App Store"
+                  style={{
+                    width: "80%",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
                 />
+              </a>
               </div>
               <div
                 style={{
@@ -163,11 +175,23 @@ const QuienesSomos = () => {
                   alignItems: "center",
                 }}
               >
+              <a
+                href="https://play.google.com/store/apps/details?id=com.garm9609.sisivoy&pli=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <img
                   src={playstore}
                   alt="Google Play"
-                  style={{ width: "80%", objectFit: "contain" }}
+                  style={{
+                    width: "80%",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
                 />
+              </a>
               </div>
             </div>
             {/* Columna 2: 1 bloque alto (ocupa 3 filas) */}

@@ -69,9 +69,11 @@ const Inicio = () => {
               </h1>
               <div className="vista-inicio-stores">
                 <a
-                  href="#"
+                  href="https://apps.apple.com/mx/app/sisivoy/id6756131297"
                   className="vista-inicio-store-link"
                   aria-label="Descargar en App Store"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <img
                     src={appStoreImg}
@@ -80,9 +82,11 @@ const Inicio = () => {
                   />
                 </a>
                 <a
-                  href="#"
+                  href="https://play.google.com/store/apps/details?id=com.garm9609.sisivoy&pli=1"
                   className="vista-inicio-store-link"
                   aria-label="Descargar en Google Play"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <img
                     src={googlePlayImg}
