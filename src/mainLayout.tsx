@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Layout, Grid, Drawer } from "antd";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import logoImg from "./assets/images/logo.png";
 import faceIcon from "./assets/images/footer/faceicon.png";
 import instaIcon from "./assets/images/footer/instaicon.png";
@@ -18,74 +19,30 @@ import CargaCV from "./views/carga-cv";
 const { Header, Content, Footer } = Layout;
 const { useBreakpoint } = Grid;
 
-type Vista =
-  | "inicio"
-  | "quienes-somos"
-  | "bolsa-trabajo"
-  | "contacto"
-  | "aviso-privacidad"
-  | "descripcion-trabajo"
-  | "carga-cv";
+type NavItem = { key: string; label: string; path: string };
 
-const navItems: { key: Vista; label: string }[] = [
-  { key: "inicio", label: "Inicio" },
-  { key: "quienes-somos", label: "¿Quiénes somos?" },
-  { key: "bolsa-trabajo", label: "Bolsa de trabajo" },
-  { key: "contacto", label: "Contacto" },
+const navItems: NavItem[] = [
+  { key: "inicio", label: "Inicio", path: "/" },
+  { key: "quienes-somos", label: "¿Quiénes somos?", path: "/quienes-somos" },
+  { key: "bolsa-trabajo", label: "Bolsa de trabajo", path: "/bolsa-trabajo" },
+  { key: "contacto", label: "Contacto", path: "/contacto" },
 ];
 
 const MainLayout = () => {
-  const [vistaActiva, setVistaActiva] = useState<Vista>("inicio");
+  const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const screens = useBreakpoint();
   const isMobile = !screens.md;
 
-  const renderVista = () => {
-    switch (vistaActiva) {
-      case "inicio":
-        return <Inicio />;
-      case "quienes-somos":
-        return <QuienesSomos />;
-      case "bolsa-trabajo":
-        return (
-          <BolsaTrabajo
-            onIrADescripcionTrabajo={() => goTo("descripcion-trabajo")}
-            onIrACargaCV={() => goTo("carga-cv")}
-          />
-        );
-      case "contacto":
-        return (
-          <Contacto onCerrarModalEnviado={() => goTo("inicio")} />
-        );
-      case "aviso-privacidad":
-        return <AvisoPrivacidad />;
-      case "descripcion-trabajo":
-        return (
-          <DescripcionTrabajo onIrACargaCV={() => goTo("carga-cv")} />
-        );
-      case "carga-cv":
-        return (
-          <CargaCV onCerrarModalEnviado={() => goTo("bolsa-trabajo")} />
-        );
-      default:
-        return null;
-    }
-  };
-
-  const goTo = (v: Vista) => {
-    setVistaActiva(v);
-    setDrawerOpen(false);
-  };
-
   const navLinks = (
     <>
-      {navItems.map(({ key, label }) => (
+      {navItems.map(({ key, label, path }) => (
         <a
           key={key}
-          href={`#${key}`}
+          href={path}
           onClick={(e) => {
             e.preventDefault();
-            goTo(key);
+            navigate(path);
           }}
           className="nav-link"
         >
@@ -102,7 +59,7 @@ const MainLayout = () => {
           <div className="logo-area">
             <button
               type="button"
-              onClick={() => goTo("inicio")}
+              onClick={() => navigate("/")}
               style={{
                 background: "none",
                 border: "none",
@@ -143,7 +100,10 @@ const MainLayout = () => {
                 <div className="drawer-logo-wrap">
                   <button
                     type="button"
-                    onClick={() => goTo("inicio")}
+                    onClick={() => {
+                      navigate("/");
+                      setDrawerOpen(false);
+                    }}
                     style={{
                       background: "none",
                       border: "none",
@@ -158,13 +118,14 @@ const MainLayout = () => {
                   </button>
                 </div>
                 <nav className="main-nav main-nav-vertical">
-                  {navItems.map(({ key, label }) => (
+                  {navItems.map(({ key, label, path }) => (
                     <a
                       key={key}
-                      href={`#${key}`}
+                      href={path}
                       onClick={(e) => {
                         e.preventDefault();
-                        goTo(key);
+                        navigate(path);
+                        setDrawerOpen(false);
                       }}
                       className="nav-link"
                     >
@@ -180,7 +141,50 @@ const MainLayout = () => {
         </div>
       </Header>
 
-      <Content className="main-content">{renderVista()}</Content>
+      <Content className="main-content">
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/quienes-somos" element={<QuienesSomos />} />
+          <Route
+            path="/bolsa-trabajo"
+            element={
+              <BolsaTrabajo
+                onIrADescripcionTrabajo={() =>
+                  navigate("/descripcion-trabajo")
+                }
+                onIrACargaCV={() => navigate("/carga-cv")}
+              />
+            }
+          />
+          <Route
+            path="/contacto"
+            element={
+              <Contacto
+                onCerrarModalEnviado={() => {
+                  navigate("/");
+                }}
+              />
+            }
+          />
+          <Route path="/aviso-privacidad" element={<AvisoPrivacidad />} />
+          <Route
+            path="/descripcion-trabajo"
+            element={
+              <DescripcionTrabajo onIrACargaCV={() => navigate("/carga-cv")} />
+            }
+          />
+          <Route
+            path="/carga-cv"
+            element={
+              <CargaCV
+                onCerrarModalEnviado={() => {
+                  navigate("/bolsa-trabajo");
+                }}
+              />
+            }
+          />
+        </Routes>
+      </Content>
 
       <Footer className="main-footer">
         <div className="footer-icons">
@@ -233,10 +237,10 @@ const MainLayout = () => {
         </div>
         <div className="footer-right">
           <a
-            href="#aviso-privacidad"
+            href="/aviso-privacidad"
             onClick={(e) => {
               e.preventDefault();
-              setVistaActiva("aviso-privacidad");
+              navigate("/aviso-privacidad");
             }}
             className="footer-link"
           >
