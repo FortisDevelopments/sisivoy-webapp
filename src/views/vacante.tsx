@@ -43,6 +43,10 @@ type CargaCVProps = {
 
 const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   const [aceptoTerminos, setAceptoTerminos] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [tieneCurriculum, setTieneCurriculum] = useState(false);
   const [disponibilidadViajar, setDisponibilidadViajar] = useState<
     string | null
   >(null);
@@ -72,6 +76,15 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
     e.preventDefault();
     setModalEnviadoOpen(true);
   };
+
+  const isFormValid =
+    nombre.trim().length > 0 &&
+    correo.trim().length > 0 &&
+    telefono.trim().length > 0 &&
+    tieneCurriculum &&
+    !!disponibilidadViajar &&
+    !!situacionLaboral &&
+    aceptoTerminos;
 
   const themeVistaCV = {
     token: { colorPrimary: "#d4238b" },
@@ -149,6 +162,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   size="large"
                   required
                   style={{ width: "100%" }}
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -169,6 +184,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   size="large"
                   required
                   style={{ width: "100%" }}
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -187,7 +204,10 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   type="tel"
                   placeholder="Número de teléfono"
                   size="large"
+                  required
                   style={{ width: "100%" }}
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -208,6 +228,19 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   size="large"
                   style={{ width: "100%" }}
                 />
+                <p
+                  style={{
+                    marginTop: "4px",
+                    marginBottom: 0,
+                    fontSize: "0.75rem",
+                    color: "#666666",
+                  }}
+                >
+                  *Al incluir voluntariamente la URL de tu perfil de LinkedIn a
+                  continuación o en tu currículum, nos das tu consentimiento para
+                  que completemos tu perfil con la información profesional que
+                  compartes en esa red social.
+                </p>
               </div>
               <div style={{ marginBottom: "16px" }}>
                 <label
@@ -231,6 +264,12 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     borderRadius: "6px",
                     fontSize: "1rem",
                   }}
+                  required
+                  onChange={(e) =>
+                    setTieneCurriculum(
+                      !!e.target.files && e.target.files.length > 0,
+                    )
+                  }
                 />
               </div>
               <div style={{ marginBottom: "16px" }} ref={refDisponibilidad}>
@@ -339,7 +378,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   type="primary"
                   htmlType="submit"
                   size="large"
-                  disabled={!aceptoTerminos}
+                  disabled={!isFormValid}
                   style={{
                     backgroundColor: "#d4238b",
                     borderColor: "#d4238b",

@@ -48,6 +48,10 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
   const [motivoContacto, setMotivoContacto] = useState<string[]>([]);
   const [openMotivo, setOpenMotivo] = useState(false);
   const refMotivo = useRef<HTMLDivElement>(null);
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -63,6 +67,13 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
     e.preventDefault();
     setModalEnviadoOpen(true);
   };
+
+  const isFormValid =
+    nombre.trim().length > 0 &&
+    correo.trim().length > 0 &&
+    telefono.trim().length > 0 &&
+    motivoContacto.length > 0 &&
+    mensaje.trim().length > 0;
 
   const themeVistaContacto = {
     token: { colorPrimary: "#d4238b" },
@@ -131,6 +142,8 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                   size="large"
                   required
                   style={{ width: "100%" }}
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -151,6 +164,8 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                   size="large"
                   required
                   style={{ width: "100%" }}
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -169,7 +184,10 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                   type="tel"
                   placeholder="Número de teléfono"
                   size="large"
+                  required
                   style={{ width: "100%" }}
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
                 />
               </div>
               <div style={{ marginBottom: "16px" }} ref={refMotivo}>
@@ -227,13 +245,17 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                   id="contacto-ayuda"
                   placeholder="Escribe tu mensaje..."
                   rows={4}
+                  required
                   style={{ width: "100%", resize: "vertical" }}
+                  value={mensaje}
+                  onChange={(e) => setMensaje(e.target.value)}
                 />
               </div>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   type="primary"
                   htmlType="submit"
+                  disabled={!isFormValid}
                   style={{
                     backgroundColor: "#d4238b",
                     borderColor: "#4d238b",
