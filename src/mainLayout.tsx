@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout, Grid, Drawer } from "antd";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import logoImg from "./assets/images/logo.svg";
@@ -35,6 +35,10 @@ const MainLayout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const screens = useBreakpoint();
   const isMobile = !screens.md;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   const navLinks = (
     <>
