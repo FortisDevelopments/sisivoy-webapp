@@ -15,6 +15,7 @@ import Contacto from "./views/contacto";
 import AvisoPrivacidad from "./views/aviso-privacidad";
 import DescripcionTrabajo from "./views/descripcion-trabajo";
 import CargaCV from "./views/carga-cv";
+import Vacante from "./views/vacante";
 
 const { Header, Content, Footer } = Layout;
 const { useBreakpoint } = Grid;
@@ -177,7 +178,17 @@ const MainLayout = () => {
           <Route
             path="/descripcion-trabajo"
             element={
-              <DescripcionTrabajo onIrACargaCV={() => navigate("/carga-cv")} />
+              <DescripcionTrabajo onIrACargaCV={() => navigate("/vacante")} />
+            }
+          />
+          <Route
+            path="/vacante"
+            element={
+              <Vacante
+                onCerrarModalEnviado={() => {
+                  navigate("/bolsa-trabajo");
+                }}
+              />
             }
           />
           <Route

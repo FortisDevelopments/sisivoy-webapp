@@ -767,3 +767,12 @@
 .vista-carga-cv .ant-radio-wrapper:hover .ant-radio-inner {
   border-color: #d4238b !important;
 }
+
+/* Carrusel Quienes Somos: ocultar scrollbar */
+.quienes-carrusel {
+  scrollbar-width: none; /* Firefox */
+}
+
+.quienes-carrusel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Row, Col } from "antd";
 import estrellaImg from "../assets/images/inicio/estrella.svg";
 import img1 from "../assets/images/trabajo/img1.png";
@@ -5,6 +6,8 @@ import img2 from "../assets/images/trabajo/img2.png";
 import img3 from "../assets/images/trabajo/img3.png";
 import img4 from "../assets/images/trabajo/img4.png";
 import img5 from "../assets/images/trabajo/img5.png";
+import flechaIzq from "../assets/images/quienes/flechaizq.svg";
+import flechaDer from "../assets/images/quienes/flechader.svg";
 
 const imagenesTrabajo = [img1, img2, img3, img4, img5];
 
@@ -17,6 +20,40 @@ const BolsaTrabajo = ({
   onIrADescripcionTrabajo,
   onIrACargaCV,
 }: BolsaTrabajoProps) => {
+  const carruselRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
+  const scrollCarrusel = (direction: "left" | "right") => {
+    const container = carruselRef.current;
+    if (!container) return;
+    const card = container.querySelector<HTMLDivElement>("div");
+    const cardWidth = card?.offsetWidth ?? 220;
+    const amount = direction === "left" ? -cardWidth : cardWidth;
+    container.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
+  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const container = carruselRef.current;
+    if (!container) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    scrollLeftRef.current = container.scrollLeft;
+  };
+
+  const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!isDraggingRef.current) return;
+    const container = carruselRef.current;
+    if (!container) return;
+    const dx = e.clientX - startXRef.current;
+    container.scrollLeft = scrollLeftRef.current - dx;
+  };
+
+  const stopDragging = () => {
+    isDraggingRef.current = false;
+  };
+
   return (
     <section
       className="vista-bolsa-trabajo"
@@ -179,34 +216,76 @@ const BolsaTrabajo = ({
         <Col xs={24} md={12}>
           <div
             style={{
-              display: "flex",
-              gap: "12px",
-              overflowX: "auto",
-              paddingBottom: "8px",
+              position: "relative",
             }}
           >
-            {imagenesTrabajo.map((src, index) => (
-              <div
-                key={`trabajo-${index}`}
-                style={{
-                  minWidth: 200,
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  flexShrink: 0,
-                  minHeight: 500,
-                }}
-              >
-                <img
-                  src={src}
-                  alt={`Bolsa de trabajo ${index + 1}`}
+            <img
+              src={flechaIzq}
+              alt="Anterior"
+              onClick={() => scrollCarrusel("left")}
+              style={{
+                position: "absolute",
+                left: -25,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 40,
+                height: 40,
+                objectFit: "contain",
+                cursor: "pointer",
+              }}
+            />
+            <img
+              src={flechaDer}
+              alt="Siguiente"
+              onClick={() => scrollCarrusel("right")}
+              style={{
+                position: "absolute",
+                right: -25,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 40,
+                height: 40,
+                objectFit: "contain",
+                cursor: "pointer",
+              }}
+            />
+            <div
+              className="quienes-carrusel"
+              style={{
+                display: "flex",
+                gap: "12px",
+                overflowX: "auto",
+                paddingBottom: "8px",
+              }}
+              ref={carruselRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={stopDragging}
+              onMouseUp={stopDragging}
+            >
+              {imagenesTrabajo.map((src, index) => (
+                <div
+                  key={`trabajo-${index}`}
                   style={{
-                    width: "100%",
-                    height: "500px",
-                    objectFit: "contain",
+                    minWidth: 200,
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    flexShrink: 0,
+                    minHeight: 500,
                   }}
-                />
-              </div>
-            ))}
+                >
+                  <img
+                    src={src}
+                    alt={`Bolsa de trabajo ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "500px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
           <p style={{ fontSize: "1.5rem" }}>
             <span style={{ fontWeight: "bold" }}>

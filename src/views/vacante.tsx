@@ -37,31 +37,18 @@ const estiloPanel = {
   gap: 8,
 };
 
-const OPCIONES_AREA = [
-  { label: "Ventas", value: "ventas" },
-  { label: "Administración", value: "administracion" },
-  { label: "Mercadotecnia (publicidad)", value: "mercadotecnia" },
-  { label: "Legal", value: "legal" },
-  { label: "Recursos humanos", value: "recursos_humanos" },
-  { label: "Soporte técnico", value: "soporte_tecnico" },
-  { label: "Contabilidad", value: "contabilidad" },
-];
-
 type CargaCVProps = {
   onCerrarModalEnviado?: () => void;
 };
 
 const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   const [aceptoTerminos, setAceptoTerminos] = useState(false);
-  const [areasPreferencia, setAreasPreferencia] = useState<string[]>([]);
   const [disponibilidadViajar, setDisponibilidadViajar] = useState<
     string | null
   >(null);
   const [situacionLaboral, setSituacionLaboral] = useState<string | null>(null);
-  const [openArea, setOpenArea] = useState(false);
   const [openDisponibilidad, setOpenDisponibilidad] = useState(false);
   const [openSituacion, setOpenSituacion] = useState(false);
-  const refArea = useRef<HTMLDivElement>(null);
   const refDisponibilidad = useRef<HTMLDivElement>(null);
   const refSituacion = useRef<HTMLDivElement>(null);
   const [modalEnviadoOpen, setModalEnviadoOpen] = useState(false);
@@ -69,8 +56,6 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
-      if (refArea.current && !refArea.current.contains(target))
-        setOpenArea(false);
       if (
         refDisponibilidad.current &&
         !refDisponibilidad.current.contains(target)
@@ -128,7 +113,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   fontWeight: 600,
                 }}
               >
-                Comunidad de talento SISIVOY
+                Vacante: Ejecutivo de ventas Jr
               </h1>
               <img
                 src={estrellaImg}
@@ -143,9 +128,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                 fontWeight: 400,
               }}
             >
-              Inscríbete a la Comunidad de Talento SISIVOY para que podamos
-              ponernos en contacto contigo con oportunidades profesionales de
-              acuerdo a tu perfil.
+              Ingresa tu información para que podamos ponernos en contacto
+              contigo para la vacante seleccionada.
             </p>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: "16px" }}>
@@ -248,46 +232,6 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     fontSize: "1rem",
                   }}
                 />
-              </div>
-              <div style={{ marginBottom: "16px" }} ref={refArea}>
-                <span
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: 500,
-                  }}
-                >
-                  Área de preferencia
-                </span>
-                <button
-                  type="button"
-                  style={{ ...estiloTrigger, textAlign: "left" }}
-                  onClick={() => setOpenArea((v) => !v)}
-                >
-                  {areasPreferencia.length
-                    ? areasPreferencia
-                        .map(
-                          (v) =>
-                            OPCIONES_AREA.find((o) => o.value === v)?.label ??
-                            v,
-                        )
-                        .join(", ")
-                    : "Seleccionar área(s)..."}
-                </button>
-                {openArea && (
-                  <div style={estiloPanel}>
-                    <Checkbox.Group
-                      options={OPCIONES_AREA}
-                      value={areasPreferencia}
-                      onChange={(values) => setAreasPreferencia(values)}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "8px",
-                      }}
-                    />
-                  </div>
-                )}
               </div>
               <div style={{ marginBottom: "16px" }} ref={refDisponibilidad}>
                 <span
@@ -399,10 +343,6 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   style={{
                     backgroundColor: "#d4238b",
                     borderColor: "#d4238b",
-                    paddingInline: 22,
-                    height: 48,
-                    fontSize: 18,
-                    fontWeight: 600,
                   }}
                 >
                   Enviar

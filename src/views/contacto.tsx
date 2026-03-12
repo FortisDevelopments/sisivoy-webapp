@@ -446,9 +446,8 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
             />
           </div>
           <p style={{ margin: 0, color: "#333", fontSize: "1rem" }}>
-            Uno de nuestros asesores de Recursos Humanos se pondrá en contacto
-            contigo en caso de alinearse tu perfil con la vacante o departamento
-            seleccionado
+            Uno de nuestros asesores se pondrá en contacto contigo lo más pronto
+            posible para revisar tu caso.
           </p>
         </div>
       </Modal>

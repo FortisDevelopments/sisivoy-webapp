@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Row, Col, Grid } from "antd";
 import estrellaImg from "../assets/images/inicio/estrella.svg";
 import img1 from "../assets/images/quienes/img1.png";
@@ -16,12 +17,47 @@ import fidelizaSvg from "../assets/images/quienes/fideliza.svg";
 import obtenSvg from "../assets/images/quienes/obten.svg";
 import convierteSvg from "../assets/images/quienes/convierte.svg";
 import puntosSvg from "../assets/images/quienes/puntos.svg";
+import flechaIzq from "../assets/images/quienes/flechaizq.svg";
+import flechaDer from "../assets/images/quienes/flechader.svg";
 
 const { useBreakpoint } = Grid;
 
 const QuienesSomos = () => {
   const screens = useBreakpoint();
   const isMobile = !screens.md;
+  const carruselRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
+  const scrollCarrusel = (direction: "left" | "right") => {
+    const container = carruselRef.current;
+    if (!container) return;
+    const card = container.querySelector<HTMLDivElement>("div");
+    const cardWidth = card?.offsetWidth ?? 220;
+    const amount = direction === "left" ? -cardWidth : cardWidth;
+    container.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
+  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const container = carruselRef.current;
+    if (!container) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    scrollLeftRef.current = container.scrollLeft;
+  };
+
+  const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!isDraggingRef.current) return;
+    const container = carruselRef.current;
+    if (!container) return;
+    const dx = e.clientX - startXRef.current;
+    container.scrollLeft = scrollLeftRef.current - dx;
+  };
+
+  const stopDragging = () => {
+    isDraggingRef.current = false;
+  };
   return (
     <section
       style={{
@@ -73,30 +109,76 @@ const QuienesSomos = () => {
         <Col xs={24} md={12}>
           <div
             style={{
-              display: "flex",
-              gap: "12px",
-              overflowX: "auto",
-              paddingBottom: "8px",
+              position: "relative",
             }}
           >
-            {[img1, img2, img3, img4, img5].map((src, index) => (
-              <div
-                key={String(index)}
-                style={{
-                  minWidth: 180,
-                  maxWidth: 220,
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  flexShrink: 0,
-                }}
-              >
-                <img
-                  src={src}
-                  alt={`Quiénes somos ${index + 1}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-            ))}
+            <img
+              src={flechaIzq}
+              alt="Anterior"
+              onClick={() => scrollCarrusel("left")}
+              style={{
+                position: "absolute",
+                left: -25,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 40,
+                height: 40,
+                objectFit: "contain",
+                cursor: "pointer",
+              }}
+            />
+            <img
+              src={flechaDer}
+              alt="Siguiente"
+              onClick={() => scrollCarrusel("right")}
+              style={{
+                position: "absolute",
+                right: -25,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 40,
+                height: 40,
+                objectFit: "contain",
+                cursor: "pointer",
+              }}
+            />
+            <div
+              className="quienes-carrusel"
+              style={{
+                display: "flex",
+                gap: "12px",
+                overflowX: "auto",
+                paddingBottom: "8px",
+              }}
+              ref={carruselRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={stopDragging}
+              onMouseUp={stopDragging}
+            >
+              {[img1, img2, img3, img4, img5].map((src, index) => (
+                <div
+                  key={String(index)}
+                  style={{
+                    minWidth: 180,
+                    maxWidth: 220,
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    flexShrink: 0,
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`Quiénes somos ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </Col>
       </Row>
