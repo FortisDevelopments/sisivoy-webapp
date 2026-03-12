@@ -1,5 +1,5 @@
 import { Row, Col } from "antd";
-import estrellaImg from "../assets/images/inicio/estrella.png";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
 import img1 from "../assets/images/trabajo/img1.png";
 import img2 from "../assets/images/trabajo/img2.png";
 import img3 from "../assets/images/trabajo/img3.png";
@@ -86,7 +86,7 @@ const BolsaTrabajo = ({
                 type="button"
                 style={{
                   position: "absolute",
-                  bottom: -30,
+                  bottom: -40,
                   right: 0,
                   backgroundColor: "#FFB800",
                   color: "#d4238b",
@@ -125,7 +125,7 @@ const BolsaTrabajo = ({
               <div
                 style={{
                   position: "absolute",
-                  bottom: -30,
+                  bottom: -40,
                   right: 0,
                   backgroundColor: "#FFB800",
                   color: "#d4238b",
@@ -161,7 +161,7 @@ const BolsaTrabajo = ({
               <div
                 style={{
                   position: "absolute",
-                  bottom: -30,
+                  bottom: -40,
                   right: 0,
                   backgroundColor: "#FFB800",
                   color: "#d4238b",

@@ -1,13 +1,13 @@
 import { Row, Col, Grid } from "antd";
-import estrellaImg from "../assets/images/inicio/estrella.png";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
 import img1 from "../assets/images/quienes/img1.png";
 import img2 from "../assets/images/quienes/img2.png";
 import img3 from "../assets/images/quienes/img3.png";
 import img4 from "../assets/images/quienes/img4.png";
 import img5 from "../assets/images/quienes/img5.png";
 import logo1 from "../assets/images/quienes/sisivoy.svg";
-import playstore from "../assets/images/inicio/googlePlay.png";
-import appstore from "../assets/images/inicio/appStore.png";
+import playstore from "../assets/images/inicio/googlePlay.svg";
+import appstore from "../assets/images/inicio/appStore.svg";
 import cafe from "../assets/images/quienes/cafeiphone.svg";
 import mapa from "../assets/images/quienes/mapaiphone.svg";
 import aumentaSvg from "../assets/images/quienes/aumenta.svg";
@@ -138,7 +138,7 @@ const QuienesSomos = () => {
                 <img
                   src={logo1}
                   alt="SISI VOY"
-                  style={{ width: "80%", objectFit: "contain" }}
+                  style={{ width: "100%", objectFit: "contain" }}
                 />
               </div>
               <div
@@ -149,23 +149,23 @@ const QuienesSomos = () => {
                   alignItems: "center",
                 }}
               >
-              <a
-                href="https://apps.apple.com/mx/app/sisivoy/id6756131297"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <img
-                  src={appstore}
-                  alt="App Store"
-                  style={{
-                    width: "80%",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
-                />
-              </a>
+                <a
+                  href="https://apps.apple.com/mx/app/sisivoy/id6756131297"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <img
+                    src={appstore}
+                    alt="App Store"
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                      display: "block",
+                      margin: "0 auto",
+                    }}
+                  />
+                </a>
               </div>
               <div
                 style={{
@@ -175,23 +175,23 @@ const QuienesSomos = () => {
                   alignItems: "center",
                 }}
               >
-              <a
-                href="https://play.google.com/store/apps/details?id=com.garm9609.sisivoy&pli=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <img
-                  src={playstore}
-                  alt="Google Play"
-                  style={{
-                    width: "80%",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
-                />
-              </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.garm9609.sisivoy&pli=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <img
+                    src={playstore}
+                    alt="Google Play"
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                      display: "block",
+                      margin: "0 auto",
+                    }}
+                  />
+                </a>
               </div>
             </div>
             {/* Columna 2: 1 bloque alto (ocupa 3 filas) */}

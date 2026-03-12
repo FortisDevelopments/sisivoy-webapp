@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Row, Col } from "antd";
-import imagenInicio from "../assets/images/inicio/iPhone 14 Pro - Silver(2) 1.png";
-import groupImg from "../assets/images/inicio/group.png";
-import estrellaImg from "../assets/images/inicio/estrella.png";
-import appStoreImg from "../assets/images/inicio/appStore.png";
-import googlePlayImg from "../assets/images/inicio/googlePlay.png";
-import mailIconImg from "../assets/images/inicio/mailicon.png";
+import imagenInicio from "../assets/images/inicio/iPhone14Pro.svg";
+import groupImg from "../assets/images/inicio/group.svg";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
+import appStoreImg from "../assets/images/inicio/appStore.svg";
+import googlePlayImg from "../assets/images/inicio/googlePlay.svg";
+import mailIconImg from "../assets/images/inicio/mailicon.svg";
 
 const Inicio = () => {
   const [modalVisible, setModalVisible] = useState(false);

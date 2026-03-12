@@ -65,11 +65,19 @@
   font-size: 1.25rem;
   text-decoration: none;
   padding: 0.25rem 0;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 .main-nav .nav-link:hover,
 .main-nav-vertical .nav-link:hover {
   text-decoration: underline;
+  opacity: 0.85;
+}
+
+.main-nav .nav-link.nav-link-active,
+.main-nav-vertical .nav-link.nav-link-active {
+  opacity: 0.6;
 }
 
 /* Icono hamburguesa (3 líneas) en móvil */

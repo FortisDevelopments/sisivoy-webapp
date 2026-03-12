@@ -1,5 +1,5 @@
 import { Row, Col } from "antd";
-import estrellaImg from "../assets/images/inicio/estrella.png";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
 import flecha from "../assets/images/trabajo/flecha.svg";
 import personaImg from "../assets/images/trabajo/persona.svg";
 

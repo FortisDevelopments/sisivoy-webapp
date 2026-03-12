@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Row, Col, Input, Button, ConfigProvider, Modal, Checkbox } from "antd";
 import waSvg from "../assets/images/contacto/wa.svg";
 import mailSvg from "../assets/images/contacto/mail.svg";
-import estrellaImg from "../assets/images/inicio/estrella.png";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
 import avionSvg from "../assets/images/trabajo/avion.svg";
 
 const { TextArea } = Input;

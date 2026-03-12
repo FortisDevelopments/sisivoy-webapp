@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Layout, Grid, Drawer } from "antd";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import logoImg from "./assets/images/logo.png";
-import faceIcon from "./assets/images/footer/faceicon.png";
-import instaIcon from "./assets/images/footer/instaicon.png";
-import tiktokIcon from "./assets/images/footer/tiktokicon.png";
-import xIcon from "./assets/images/footer/xicon.png";
-import lkIcon from "./assets/images/footer/lkicon.png";
-import waIcon from "./assets/images/footer/waicon.png";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import logoImg from "./assets/images/logo.svg";
+import faceIcon from "./assets/images/footer/faceicon.svg";
+import instaIcon from "./assets/images/footer/instaicon.svg";
+import tiktokIcon from "./assets/images/footer/tiktokicon.svg";
+import xIcon from "./assets/images/footer/xicon.svg";
+import lkIcon from "./assets/images/footer/lkicon.svg";
+import waIcon from "./assets/images/footer/waicon.svg";
 import Inicio from "./views/inicio";
 import QuienesSomos from "./views/quienes-somos";
 import BolsaTrabajo from "./views/bolsa-trabajo";
@@ -30,25 +30,29 @@ const navItems: NavItem[] = [
 
 const MainLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const screens = useBreakpoint();
   const isMobile = !screens.md;
 
   const navLinks = (
     <>
-      {navItems.map(({ key, label, path }) => (
-        <a
-          key={key}
-          href={path}
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(path);
-          }}
-          className="nav-link"
-        >
-          {label}
-        </a>
-      ))}
+      {navItems.map(({ key, label, path }) => {
+        const isActive = location.pathname === path;
+        return (
+          <a
+            key={key}
+            href={path}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(path);
+            }}
+            className={`nav-link${isActive ? " nav-link-active" : ""}`}
+          >
+            {label}
+          </a>
+        );
+      })}
     </>
   );
 
@@ -118,20 +122,23 @@ const MainLayout = () => {
                   </button>
                 </div>
                 <nav className="main-nav main-nav-vertical">
-                  {navItems.map(({ key, label, path }) => (
-                    <a
-                      key={key}
-                      href={path}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(path);
-                        setDrawerOpen(false);
-                      }}
-                      className="nav-link"
-                    >
-                      {label}
-                    </a>
-                  ))}
+                  {navItems.map(({ key, label, path }) => {
+                    const isActive = location.pathname === path;
+                    return (
+                      <a
+                        key={key}
+                        href={path}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate(path);
+                          setDrawerOpen(false);
+                        }}
+                        className={`nav-link${isActive ? " nav-link-active" : ""}`}
+                      >
+                        {label}
+                      </a>
+                    );
+                  })}
                 </nav>
               </Drawer>
             </>

@@ -10,7 +10,7 @@ import {
   Modal,
 } from "antd";
 import comunidadImg from "../assets/images/trabajo/comunidad.png";
-import estrellaImg from "../assets/images/inicio/estrella.png";
+import estrellaImg from "../assets/images/inicio/estrella.svg";
 import avionSvg from "../assets/images/trabajo/avion.svg";
 
 const estiloTrigger = {
