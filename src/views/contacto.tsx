@@ -4,6 +4,7 @@ import waSvg from "../assets/images/contacto/wa.svg";
 import mailSvg from "../assets/images/contacto/mail.svg";
 import estrellaImg from "../assets/images/inicio/estrella.svg";
 import avionSvg from "../assets/images/trabajo/avion.svg";
+import { sendContactForm } from "../services/mailservice";
 
 const { TextArea } = Input;
 
@@ -52,6 +53,8 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -63,9 +66,34 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setModalEnviadoOpen(true);
+    const motivoTexto =
+      motivoContacto
+        .map(
+          (v) =>
+            OPCIONES_MOTIVO.find((o) => o.value === v)?.label ?? v,
+        )
+        .join(", ") || "";
+    const payload = {
+      nombre: nombre.trim(),
+      correo: correo.trim(),
+      telefono: telefono.trim(),
+      motivo: motivoTexto,
+      mensaje: mensaje.trim(),
+    };
+    try {
+      setEnviando(true);
+      setErrorEnvio(null);
+      await sendContactForm(payload);
+      setModalEnviadoOpen(true);
+    } catch {
+      setErrorEnvio(
+        "Hubo un problema al enviar tu mensaje. Intenta de nuevo.",
+      );
+    } finally {
+      setEnviando(false);
+    }
   };
 
   const isFormValid =
@@ -255,7 +283,7 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || enviando}
                   style={{
                     backgroundColor: "#d4238b",
                     borderColor: "#4d238b",
@@ -264,9 +292,22 @@ const Contacto = ({ onCerrarModalEnviado }: ContactoProps) => {
                     height: "50px",
                   }}
                 >
-                  Enviar
+                  {enviando ? "Enviando..." : "Enviar"}
                 </Button>
               </div>
+              {errorEnvio && (
+                <p
+                  style={{
+                    marginTop: "12px",
+                    marginBottom: 0,
+                    fontSize: "0.875rem",
+                    color: "#d4238b",
+                    textAlign: "center",
+                  }}
+                >
+                  {errorEnvio}
+                </p>
+              )}
             </form>
           </Col>
           <Col xs={24} md={12} className="vista-contacto-col-medios">

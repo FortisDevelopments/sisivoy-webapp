@@ -8,7 +8,16 @@ export type JobFormData = {
   area?: string;
 };
 
+export type ContactFormData = {
+  nombre: string;
+  correo: string;
+  telefono: string;
+  motivo: string;
+  mensaje: string;
+};
+
 const JOB_FORM_ENDPOINT = "https://api.sisivoy.com/api/forms/job";
+const CONTACT_FORM_ENDPOINT = "https://api.sisivoy.com/api/forms/contact";
 
 export async function sendJobApplication(
   data: JobFormData,
@@ -25,5 +34,17 @@ export async function sendJobApplication(
 
   if (!response.ok) {
     throw new Error(`Error al enviar postulación (${response.status})`);
+  }
+}
+
+export async function sendContactForm(data: ContactFormData): Promise<void> {
+  const response = await fetch(CONTACT_FORM_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al enviar contacto (${response.status})`);
   }
 }
