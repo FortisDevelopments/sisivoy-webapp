@@ -12,6 +12,8 @@ import {
 import comunidadImg from "../assets/images/trabajo/comunidad.png";
 import estrellaImg from "../assets/images/inicio/estrella.svg";
 import avionSvg from "../assets/images/trabajo/avion.svg";
+import { sendJobApplication } from "../services/mailservice";
+import type { JobFormData } from "../services/mailservice";
 
 const estiloTrigger = {
   width: "100%",
@@ -57,6 +59,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
   const [tieneCurriculum, setTieneCurriculum] = useState(false);
+  const [linkedin, setLinkedin] = useState("");
+  const [cvFile, setCvFile] = useState<File | null>(null);
   const [areasPreferencia, setAreasPreferencia] = useState<string[]>([]);
   const [disponibilidadViajar, setDisponibilidadViajar] = useState<
     string | null
@@ -69,6 +73,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   const refDisponibilidad = useRef<HTMLDivElement>(null);
   const refSituacion = useRef<HTMLDivElement>(null);
   const [modalEnviadoOpen, setModalEnviadoOpen] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -87,9 +93,41 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setModalEnviadoOpen(true);
+    if (!cvFile || !disponibilidadViajar || !situacionLaboral) return;
+
+    const disponibilidadTexto =
+      disponibilidadViajar === "si" ? "Inmediata" : "Sin disponibilidad inmediata";
+    const situacionTexto =
+      situacionLaboral === "empleado"
+        ? "Empleado actualmente"
+        : "Buscando oportunidades activamente";
+
+    const areaTexto = areasPreferencia
+      .map((v) => OPCIONES_AREA.find((o) => o.value === v)?.label ?? v)
+      .join(", ");
+
+    const payload: JobFormData = {
+      nombre,
+      correo,
+      telefono,
+      disponibilidad: disponibilidadTexto,
+      situacion: situacionTexto,
+      linkedin: linkedin || undefined,
+      area: areaTexto || undefined,
+    };
+
+    try {
+      setEnviando(true);
+      setErrorEnvio(null);
+      await sendJobApplication(payload, cvFile);
+      setModalEnviadoOpen(true);
+    } catch {
+      setErrorEnvio("Hubo un problema al enviar tu postulación. Intenta de nuevo.");
+    } finally {
+      setEnviando(false);
+    }
   };
 
   const isFormValid =
@@ -244,6 +282,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   placeholder="URL de tu perfil de LinkedIn"
                   size="large"
                   style={{ width: "100%" }}
+                  value={linkedin}
+                  onChange={(e) => setLinkedin(e.target.value)}
                 />
                 <p
                   style={{
@@ -282,9 +322,11 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     fontSize: "1rem",
                   }}
                   required
-                  onChange={(e) =>
-                    setTieneCurriculum(!!e.target.files && e.target.files.length > 0)
-                  }
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    setTieneCurriculum(!!file);
+                    setCvFile(file ?? null);
+                  }}
                 />
               </div>
               <div style={{ marginBottom: "16px" }} ref={refArea}>
@@ -433,7 +475,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   type="primary"
                   htmlType="submit"
                   size="large"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || enviando}
                   style={{
                     backgroundColor: "#d4238b",
                     borderColor: "#d4238b",
@@ -443,9 +485,22 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     fontWeight: 600,
                   }}
                 >
-                  Enviar
+                  {enviando ? "Enviando..." : "Enviar"}
                 </Button>
               </div>
+              {errorEnvio && (
+                <p
+                  style={{
+                    marginTop: "10px",
+                    marginBottom: 0,
+                    color: "#d32f2f",
+                    fontSize: "0.9rem",
+                    textAlign: "right",
+                  }}
+                >
+                  {errorEnvio}
+                </p>
+              )}
             </form>
           </Col>
           <Col xs={24} md={12} className="vista-carga-cv-col-imagen">
