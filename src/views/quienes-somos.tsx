@@ -202,15 +202,17 @@ const QuienesSomos = () => {
               style={{
                 flex: 1,
                 minWidth: 0,
+                width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 gap: "8px",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "stretch",
               }}
             >
               <div
                 style={{
+                  width: "100%",
                   display: "flex",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -225,6 +227,7 @@ const QuienesSomos = () => {
               </div>
               <div
                 style={{
+                  width: "100%",
                   display: "flex",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -235,7 +238,7 @@ const QuienesSomos = () => {
                   href="https://apps.apple.com/mx/app/sisivoy/id6756131297"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  style={{ display: "flex", justifyContent: "center", width: "100%" }}
                 >
                   <img
                     src={appstore}
@@ -251,6 +254,7 @@ const QuienesSomos = () => {
               </div>
               <div
                 style={{
+                  width: "100%",
                   display: "flex",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -261,7 +265,7 @@ const QuienesSomos = () => {
                   href="https://play.google.com/store/apps/details?id=com.garm9609.sisivoy&pli=1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  style={{ display: "flex", justifyContent: "center", width: "100%" }}
                 >
                   <img
                     src={playstore}

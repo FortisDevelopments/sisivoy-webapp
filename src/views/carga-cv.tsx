@@ -75,6 +75,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
   const [modalEnviadoOpen, setModalEnviadoOpen] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
+  const [errorArchivo, setErrorArchivo] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -313,7 +314,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                 <input
                   id="curriculum"
                   type="file"
-                  accept=".pdf,.doc,.docx"
+                  accept=".pdf"
                   style={{
                     width: "100%",
                     padding: "8px",
@@ -324,10 +325,62 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   required
                   onChange={(e) => {
                     const file = e.target.files?.[0];
-                    setTieneCurriculum(!!file);
-                    setCvFile(file ?? null);
+
+                    if (!file) {
+                      setTieneCurriculum(false);
+                      setCvFile(null);
+                      setErrorArchivo(null);
+                      return;
+                    }
+
+                    const esPdf =
+                      file.type === "application/pdf" ||
+                      file.name.toLowerCase().endsWith(".pdf");
+                    const maxBytes = 6 * 1024 * 1024;
+
+                    if (!esPdf) {
+                      setErrorArchivo("Solo se permiten archivos PDF.");
+                      setTieneCurriculum(false);
+                      setCvFile(null);
+                      e.target.value = "";
+                      return;
+                    }
+
+                    if (file.size > maxBytes) {
+                      setErrorArchivo("Archivo demasiado grande");
+                      setTieneCurriculum(false);
+                      setCvFile(null);
+                      e.target.value = "";
+                      return;
+                    }
+
+                    setErrorArchivo(null);
+                    setTieneCurriculum(true);
+                    setCvFile(file);
                   }}
                 />
+                <p
+                  style={{
+                    marginTop: "4px",
+                    marginBottom: 0,
+                    fontSize: "0.75rem",
+                    color: "#666",
+                  }}
+                >
+                  Unicamente se aceptan archivos pdf menores a 5Mb
+                </p>
+                {errorArchivo && (
+                  <p
+                    style={{
+                      marginTop: "4px",
+                      marginBottom: 0,
+                      fontSize: "0.75rem",
+                      color: "#d4238b",
+                    }}
+                  >
+                    {errorArchivo}
+                  </p>
+                )}
               </div>
               <div style={{ marginBottom: "16px" }} ref={refArea}>
                 <span
