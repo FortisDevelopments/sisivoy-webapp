@@ -39,6 +39,22 @@ const estiloPanel = {
   gap: 8,
 };
 
+const CV_ACCEPT = ".pdf,.doc,.docx";
+
+function esArchivoCvPermitido(file: File): boolean {
+  const name = file.name.toLowerCase();
+  const t = file.type;
+  return (
+    t === "application/pdf" ||
+    name.endsWith(".pdf") ||
+    t === "application/msword" ||
+    name.endsWith(".doc") ||
+    t ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    name.endsWith(".docx")
+  );
+}
+
 type CargaCVProps = {
   onCerrarModalEnviado?: () => void;
 };
@@ -293,7 +309,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                 <input
                   id="curriculum"
                   type="file"
-                  accept=".pdf"
+                  accept={CV_ACCEPT}
                   style={{
                     width: "100%",
                     padding: "8px",
@@ -312,13 +328,12 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                       return;
                     }
 
-                    const esPdf =
-                      file.type === "application/pdf" ||
-                      file.name.toLowerCase().endsWith(".pdf");
                     const maxBytes = 6 * 1024 * 1024;
 
-                    if (!esPdf) {
-                      setErrorArchivo("Solo se permiten archivos PDF.");
+                    if (!esArchivoCvPermitido(file)) {
+                      setErrorArchivo(
+                        "Solo se permiten archivos PDF, Word (.doc, .docx).",
+                      );
                       setTieneCurriculum(false);
                       setCvFile(null);
                       e.target.value = "";
@@ -346,7 +361,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     color: "#666",
                   }}
                 >
-                  Unicamente se aceptan archivos pdf menores a 5Mb
+                  Se aceptan archivos PDF o Word (.doc, .docx) menores a 6&nbsp;MB
                 </p>
                 {errorArchivo && (
                   <p
