@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, Grid, Drawer } from "antd";
+import { Layout, Drawer } from "antd";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import logoImg from "./assets/images/logo.svg";
 import faceIcon from "./assets/images/footer/faceicon.svg";
@@ -18,8 +18,6 @@ import CargaCV from "./views/carga-cv";
 import Vacante from "./views/vacante";
 
 const { Header, Content, Footer } = Layout;
-const { useBreakpoint } = Grid;
-
 type NavItem = { key: string; label: string; path: string };
 
 const navItems: NavItem[] = [
@@ -33,8 +31,27 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const screens = useBreakpoint();
-  const isMobile = !screens.md;
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Control de responsividad del header (punto de corte a 1024px).
+  useEffect(() => {
+    const mq = globalThis.matchMedia("(max-width: 1024px)");
+
+    const update = () => setIsMobile(mq.matches);
+    update();
+
+    // Compatibilidad entre navegadores (addEventListener vs addListener).
+    if (mq.addEventListener) {
+      mq.addEventListener("change", update);
+      return () => mq.removeEventListener("change", update);
+    }
+
+    // Fallback sin `addListener` (evita warning por deprecación).
+    mq.onchange = update;
+    return () => {
+      mq.onchange = null;
+    };
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
