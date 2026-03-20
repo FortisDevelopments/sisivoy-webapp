@@ -114,8 +114,7 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
     e.preventDefault();
     if (!cvFile || !disponibilidadViajar || !situacionLaboral) return;
 
-    const disponibilidadTexto =
-      disponibilidadViajar === "si" ? "Inmediata" : "Sin disponibilidad inmediata";
+    const disponibilidadTexto = disponibilidadViajar === "si" ? "Sí" : "No";
     const situacionTexto =
       situacionLaboral === "empleado"
         ? "Empleado actualmente"
@@ -141,7 +140,9 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
       await sendJobApplication(payload, cvFile);
       setModalEnviadoOpen(true);
     } catch {
-      setErrorEnvio("Hubo un problema al enviar tu postulación. Intenta de nuevo.");
+      setErrorEnvio(
+        "Hubo un problema al enviar tu postulación. Intenta de nuevo.",
+      );
     } finally {
       setEnviando(false);
     }
@@ -311,9 +312,9 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                   }}
                 >
                   *Al incluir voluntariamente la URL de tu perfil de LinkedIn a
-                  continuación o en tu currículum, nos das tu consentimiento para
-                  que completemos tu perfil con la información profesional que
-                  compartes en esa red social.
+                  continuación o en tu currículum, nos das tu consentimiento
+                  para que completemos tu perfil con la información profesional
+                  que compartes en esa red social.
                 </p>
               </div>
               <div style={{ marginBottom: "16px" }}>
@@ -382,7 +383,8 @@ const CargaCV = ({ onCerrarModalEnviado }: CargaCVProps) => {
                     color: "#666",
                   }}
                 >
-                  Se aceptan archivos PDF o Word (.doc, .docx) menores a 6&nbsp;MB
+                  Se aceptan archivos PDF o Word (.doc, .docx) menores a
+                  6&nbsp;MB
                 </p>
                 {errorArchivo && (
                   <p

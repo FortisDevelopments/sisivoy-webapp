@@ -7,10 +7,14 @@ import estrellaImg from "../assets/images/inicio/estrella.svg";
 import appStoreImg from "../assets/images/inicio/appStore.svg";
 import googlePlayImg from "../assets/images/inicio/googlePlay.svg";
 import mailIconImg from "../assets/images/inicio/mailicon.svg";
+import { sendContactForm } from "../services/mailservice";
 
 const Inicio = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
+  const [enviado, setEnviado] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isEmailValid = /^\S+@\S+\.\S+$/.test(email.trim());
 
@@ -24,6 +28,45 @@ const Inicio = () => {
   }, [modalVisible]);
 
   const handleClose = () => setModalVisible(false);
+
+  useEffect(() => {
+    if (!modalVisible) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [modalVisible]);
+
+  const handleEnviarNewsletter = async () => {
+    const correo = email.trim();
+    if (!/^\S+@\S+\.\S+$/.test(correo)) return;
+
+    try {
+      setEnviando(true);
+      setErrorEnvio(null);
+      await sendContactForm({
+        nombre: "Registro a Newsletter",
+        correo,
+        telefono: "Sin numero",
+        motivo: "Registro de correo a Newsletter",
+        mensaje: "Hola, me gustaría registrar mi correo a su Newsletter",
+      });
+      setEnviado(true);
+      // Cerrar el modal justo después de recibir éxito del servidor.
+      setModalVisible(false);
+      setEmail("");
+      setEnviado(false);
+    } catch {
+      setErrorEnvio("No se pudo registrar tu correo. Intenta de nuevo.");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  let textoBotonEnviar = "Enviar";
+  if (enviando) textoBotonEnviar = "Enviando...";
+  if (enviado) textoBotonEnviar = "¡Listo!";
 
   return (
     <section className="vista-inicio">
@@ -52,7 +95,7 @@ const Inicio = () => {
                     alt=""
                     className="vista-inicio-estrella"
                   />
-                  ¡ DISFRUTA DE TODAS
+                  {"¡ DISFRUTA DE TODAS"}
                 </span>
                 <span className="vista-inicio-titulo">
                   LAS{" "}
@@ -105,8 +148,6 @@ const Inicio = () => {
             ref={dialogRef}
             className="modal-novedades-overlay"
             onClose={handleClose}
-            onClick={(e) => e.target === dialogRef.current && handleClose()}
-            onKeyDown={(e) => e.key === "Escape" && handleClose()}
             aria-labelledby="modal-novedades-titulo"
           >
             <div className="modal-novedades-box">
@@ -148,19 +189,29 @@ const Inicio = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="modal-novedades-input"
+                    disabled={enviando || enviado}
                   />
                   <button
                     type="button"
                     className="modal-novedades-nextBtn"
-                    disabled={!isEmailValid}
-                    onClick={() => {
-                      if (!isEmailValid) return;
-                      handleClose();
-                    }}
+                    disabled={!isEmailValid || enviando || enviado}
+                    onClick={handleEnviarNewsletter}
                   >
-                    Enviar
+                    {textoBotonEnviar}
                   </button>
                 </div>
+                {errorEnvio && (
+                  <p
+                    style={{
+                      margin: "10px 0 0",
+                      color: "#b71c1c",
+                      fontSize: "0.95rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    {errorEnvio}
+                  </p>
+                )}
               </div>
             </div>
           </dialog>,
