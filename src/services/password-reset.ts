@@ -1,5 +1,5 @@
 const RESET_PASSWORD_ENDPOINT =
-  "https://api.sisivoy.com/api/reset-password";
+  "https://api.sisivoy.com/api/auth/reset-password";
 
 export type ResetPasswordPayload = {
   token: string;
