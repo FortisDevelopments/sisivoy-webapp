@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Form, Input, Button, ConfigProvider, Alert, App } from "antd";
+import { Form, Input, Button, ConfigProvider, Alert, App, Modal } from "antd";
 import { resetPasswordWithToken } from "../services/password-reset";
 
 const themeResetPassword = {
@@ -25,6 +25,7 @@ const ResetPasswordContenido = () => {
 
   const [form] = Form.useForm();
   const [enviando, setEnviando] = useState(false);
+  const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
 
   const nuevaContraseña = Form.useWatch("nuevaContraseña", form) ?? "";
   const confirmarContraseña = Form.useWatch("confirmarContraseña", form) ?? "";
@@ -80,8 +81,7 @@ const ResetPasswordContenido = () => {
                   token,
                   password: values.nuevaContraseña,
                 });
-                mensaje.success("Tu contraseña se actualizó correctamente.");
-                navigate("/");
+                setModalExitoAbierto(true);
               } catch {
                 mensaje.error(
                   "No pudimos restablecer la contraseña. Verifica el enlace o intenta más tarde.",
@@ -156,6 +156,31 @@ const ResetPasswordContenido = () => {
           />
         )}
       </div>
+
+      <Modal
+        open={modalExitoAbierto}
+        title="Contraseña actualizada"
+        closable={false}
+        mask={{ closable: false }}
+        keyboard={false}
+        centered
+        footer={
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => {
+              setModalExitoAbierto(false);
+              navigate("/");
+            }}
+          >
+            Aceptar
+          </Button>
+        }
+      >
+        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6 }}>
+          Tu contraseña se actualizó correctamente.
+        </p>
+      </Modal>
     </section>
   );
 };
