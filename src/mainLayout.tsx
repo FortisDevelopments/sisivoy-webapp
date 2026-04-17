@@ -16,6 +16,7 @@ import AvisoPrivacidad from "./views/aviso-privacidad";
 import DescripcionTrabajo from "./views/descripcion-trabajo";
 import CargaCV from "./views/carga-cv";
 import Vacante from "./views/vacante";
+import ResetPassword from "./views/reset-password";
 
 const { Header, Content, Footer } = Layout;
 type NavItem = { key: string; label: string; path: string };
@@ -196,6 +197,7 @@ const MainLayout = () => {
             }
           />
           <Route path="/aviso-privacidad" element={<AvisoPrivacidad />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/descripcion-trabajo"
             element={
